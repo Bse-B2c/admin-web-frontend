@@ -1,14 +1,13 @@
-import Layout from "@layouts/Layout";
-import { createTheme, ThemeProvider } from "@material-ui/core";
-
-const theme = createTheme({});
+import React from 'react';
+import Layout from '@layouts/Layout';
+import Grid from '@mui/material/Grid';
 
 function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <Layout />
-    </ThemeProvider>
-  );
+	return (
+		<Grid container>
+			<Layout />
+		</Grid>
+	);
 }
 
 export default App;
