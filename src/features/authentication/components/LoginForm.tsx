@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent, FormEvent } from 'react';
+import React, { FC, useState } from 'react';
 import {
 	Button,
 	Checkbox,
@@ -12,6 +12,7 @@ import {
 	OutlinedInput,
 } from '@mui/material';
 import { Visibility, VisibilityOff, Email } from '@mui/icons-material';
+import { useForm } from '@hooks/useForm';
 
 interface LoginFormState {
 	email: string;
@@ -25,22 +26,18 @@ type LoginFormProps = LoginFormStateProps & LoginFormDispatchProps;
 
 const LoginForm: FC<LoginFormProps> = () => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const [{ email, password }, setLoginForm] = useState<LoginFormState>({
+	const {
+		form: { email, password },
+		onChange,
+		handleSubmit,
+	} = useForm<LoginFormState>({
 		email: '',
 		password: '',
 	});
 
 	const handleClickShowPassword = () => setShowPassword(show => !show);
 
-	const onChange = ({
-		target: { name, value },
-	}: ChangeEvent<HTMLInputElement>) => {
-		setLoginForm(prevState => ({ ...prevState, [name]: value }));
-	};
-
-	const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-	};
+	const onSubmit = handleSubmit(data => {});
 
 	return (
 		<Grid
