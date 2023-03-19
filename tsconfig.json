@@ -19,6 +19,7 @@
       "@/*": ["./src/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@pages/*": ["./src/pages/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@features/*": ["./src/features/*"],
       "@components/*": ["./src/components/*"],
       "@store/*": ["./src/store/*"]
