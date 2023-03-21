@@ -7,7 +7,7 @@ import {
 	setTokens,
 } from '@features/authentication';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { Tokens } from '@features/authentication/model/Tokens';
+import type { Tokens } from '@features/authentication';
 
 const accountService = import.meta.env['VITE_ACCOUNT_SERVICE'];
 
