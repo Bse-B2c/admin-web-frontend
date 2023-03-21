@@ -1,19 +1,13 @@
-import React from 'react';
-import Layout from '@layouts/Layout';
+import React, { lazy } from 'react';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
-import { grey, purple } from '@mui/material/colors';
+import { Route, Routes } from 'react-router-dom';
+
+const Login = lazy(() => import('@pages/Login'));
+const Layout = lazy(() => import('@layouts/Layout'));
 
 let theme = createTheme({
 	palette: {
-		primary: {
-			main: purple[500],
-		},
-		secondary: {
-			main: grey[500],
-		},
-		background: {
-			default: grey[100],
-		},
+		mode: 'dark',
 	},
 });
 theme = responsiveFontSizes(theme);
@@ -21,7 +15,10 @@ theme = responsiveFontSizes(theme);
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
-			<Layout />
+			<Routes>
+				<Route path={'login'} element={<Login />} />
+				<Route path={'/*'} element={<Layout />} />
+			</Routes>
 		</ThemeProvider>
 	);
 }
