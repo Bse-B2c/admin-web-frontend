@@ -1,9 +1,19 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/query';
-import { getToken } from '@features/authentication';
+import { BaseQueryApi, fetchBaseQuery } from '@reduxjs/toolkit/query';
+import type { FetchArgs } from '@reduxjs/toolkit/query';
+import {
+	getRefreshToken,
+	getToken,
+	removeTokens,
+	setTokens,
+} from '@features/authentication';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { Tokens } from '@features/authentication/model/Tokens';
 
-const baseQuery = (host: string) =>
+const accountService = import.meta.env['VITE_ACCOUNT_SERVICE'];
+
+const baseQuery = (serviceHost: string) =>
 	fetchBaseQuery({
-		baseUrl: host,
+		baseUrl: serviceHost,
 		credentials: 'same-origin',
 		prepareHeaders: headers => {
 			const token = getToken();
@@ -11,4 +21,49 @@ const baseQuery = (host: string) =>
 
 			return headers;
 		},
+	});
+
+const baseQueryWithReauth =
+	(serviceHost: string) =>
+	async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: {}) => {
+		let result = await baseQuery(serviceHost)(args, api, extraOptions);
+
+		const { error } = result;
+
+		if (error && error.status === 401) {
+			// try to get a new token
+			const { error: refreshTokenError, data } = await baseQuery(
+				`${accountService}/api/account/token`
+			)(
+				{
+					url: '/refresh',
+					method: 'POST',
+					body: { refreshToken: getRefreshToken() || '' },
+				},
+				api,
+				extraOptions
+			);
+
+			if (!refreshTokenError) {
+				const {
+					data: { token, refreshToken },
+				} = data as { data: Tokens };
+
+				setTokens({ token, refreshToken: refreshToken?.key ?? '' });
+
+				result = await baseQuery(serviceHost)(args, api, extraOptions);
+			} else {
+				removeTokens();
+			}
+		} else if (error && (error.status === 400 || error.status === 403)) {
+			removeTokens();
+		}
+
+		return result;
+	};
+
+export const apiSlice = (serviceHost: string) =>
+	createApi({
+		baseQuery: baseQueryWithReauth(serviceHost),
+		endpoints: builder => ({}),
 	});
