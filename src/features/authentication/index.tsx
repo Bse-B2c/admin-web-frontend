@@ -6,7 +6,14 @@ import {
 	removeTokens,
 } from '@features/authentication/utils/utilsAuth';
 import { Tokens } from '@features/authentication/model/Tokens';
-
-export { LoginForm, getToken, getRefreshToken, removeTokens, setTokens };
+import { authApi } from '@features/authentication/services/auth';
 
 export type { Tokens };
+export {
+	LoginForm,
+	authApi,
+	getToken,
+	getRefreshToken,
+	removeTokens,
+	setTokens,
+};
