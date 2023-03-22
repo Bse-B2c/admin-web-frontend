@@ -1,4 +1,5 @@
 import LoginForm from '@features/authentication/components/LoginForm';
+import RequireAuth from '@features/authentication/components/RequireAuth';
 import {
 	getToken,
 	getRefreshToken,
@@ -11,6 +12,7 @@ import { authApi } from '@features/authentication/services/auth';
 export type { Tokens };
 export {
 	LoginForm,
+	RequireAuth,
 	authApi,
 	getToken,
 	getRefreshToken,
