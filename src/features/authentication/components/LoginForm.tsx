@@ -1,5 +1,7 @@
 import React, { FC, useState } from 'react';
 import {
+	Alert,
+	CircularProgress,
 	Button,
 	Checkbox,
 	FormControl,
@@ -13,6 +15,10 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff, Email } from '@mui/icons-material';
 import { useForm } from '@hooks/useForm';
+import { useLoginMutation } from '@features/authentication/services/auth';
+import { setTokens } from '@features/authentication';
+import { ApiResponse } from '@/model/ApiResponse';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginFormState {
 	email: string;
@@ -25,6 +31,8 @@ interface LoginFormDispatchProps {}
 type LoginFormProps = LoginFormStateProps & LoginFormDispatchProps;
 
 const LoginForm: FC<LoginFormProps> = () => {
+	const navigate = useNavigate();
+	const [login, { isLoading, isError, error }] = useLoginMutation();
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const {
 		form: { email, password },
@@ -37,8 +45,25 @@ const LoginForm: FC<LoginFormProps> = () => {
 
 	const handleClickShowPassword = () => setShowPassword(show => !show);
 
-	const onSubmit = handleSubmit(data => {});
+	const onSubmit = handleSubmit(async data => {
+		try {
+			const { token, refreshToken } = await login(data).unwrap();
+			setTokens({ token, refreshToken: refreshToken?.key || '' });
+			navigate('/');
+		} catch (e) {}
+	});
 
+	let alert: JSX.Element | null = null;
+
+	if (isError && error) {
+		const { data } = error as unknown as { data: ApiResponse<unknown> };
+
+		alert = (
+			<Grid item xs>
+				<Alert severity="error">{data.error?.message}</Alert>
+			</Grid>
+		);
+	}
 	return (
 		<Grid
 			container
@@ -105,7 +130,11 @@ const LoginForm: FC<LoginFormProps> = () => {
 					fullWidth
 					variant={'contained'}
 					color={'primary'}>
-					Sign In
+					{!isLoading ? (
+						<span>Sign In</span>
+					) : (
+						<CircularProgress color={'inherit'} size={25} />
+					)}
 				</Button>
 			</Grid>
 			<Grid item xs textAlign={'center'}>
@@ -113,6 +142,7 @@ const LoginForm: FC<LoginFormProps> = () => {
 					Forgot password?
 				</Link>
 			</Grid>
+			{alert}
 		</Grid>
 	);
 };
