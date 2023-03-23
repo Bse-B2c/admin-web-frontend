@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import {
+	Box,
 	Breadcrumbs,
 	IconButton,
 	Link,
@@ -12,6 +13,7 @@ import AppBar from '@components/AppBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { setOpen, close } from '@store/appBar/appBarSlice';
+import AccountMenu from '@components/AccountMenu/AccountMenu';
 
 interface HeaderStateProps {}
 interface HeaderDispatchProps {}
@@ -40,15 +42,18 @@ const Header: FC<HeaderProps> = () => {
 					}}>
 					{open ? <MenuIconOpen /> : <MenuIcon />}
 				</IconButton>
-				<Breadcrumbs aria-label="breadcrumb">
-					<Link underline="hover" color="inherit" href="/">
-						MUI
-					</Link>
-					<Link underline="hover" color="inherit" href="/">
-						Core
-					</Link>
-					<Typography color={'text.primary'}>Breadcrumbs</Typography>
-				</Breadcrumbs>
+				<Box component="div" sx={{ flexGrow: 1 }}>
+					<Breadcrumbs aria-label="breadcrumb">
+						<Link underline="hover" color="inherit" href="/">
+							MUI
+						</Link>
+						<Link underline="hover" color="inherit" href="/">
+							Core
+						</Link>
+						<Typography color={'text.primary'}>Breadcrumbs</Typography>
+					</Breadcrumbs>
+				</Box>
+				<AccountMenu />
 			</Toolbar>
 		</AppBar>
 	);
