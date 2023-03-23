@@ -13,7 +13,7 @@ import AppBar from '@components/AppBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { setOpen, close } from '@store/appBar/appBarSlice';
-import AccountMenu from '@components/AccountMenu/AccountMenu';
+import AccountMenu from '@components/AccountMenu';
 
 interface HeaderStateProps {}
 interface HeaderDispatchProps {}
