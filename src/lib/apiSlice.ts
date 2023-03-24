@@ -6,7 +6,6 @@ import {
 	removeTokens,
 	setTokens,
 } from '@features/authentication';
-import { createApi } from '@reduxjs/toolkit/query/react';
 import type { Tokens } from '@features/authentication';
 
 const accountService = import.meta.env['VITE_ACCOUNT_SERVICE'];
@@ -23,7 +22,7 @@ const baseQuery = (serviceHost: string) =>
 		},
 	});
 
-const baseQueryWithReauth =
+export const baseQueryWithReauth =
 	(serviceHost: string) =>
 	async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: {}) => {
 		let result = await baseQuery(serviceHost)(args, api, extraOptions);
@@ -61,9 +60,3 @@ const baseQueryWithReauth =
 
 		return result;
 	};
-
-export const apiSlice = (serviceHost: string) =>
-	createApi({
-		baseQuery: baseQueryWithReauth(serviceHost),
-		endpoints: builder => ({}),
-	});

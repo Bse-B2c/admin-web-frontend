@@ -1,12 +1,15 @@
-import { apiSlice } from '@/lib/apiSlice';
+import { baseQueryWithReauth } from '@/lib/apiSlice';
 import { getServiceHost } from '@utils/getServiceHost';
 import type { Tokens } from '@features/authentication';
 import { User } from '@/model/User';
 import { ApiResponse } from '@/model/ApiResponse';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 const service = getServiceHost('account');
 
-export const authApi = apiSlice(`${service}/api/account/`).injectEndpoints({
+export const authApi = createApi({
+	reducerPath: 'authApi',
+	baseQuery: baseQueryWithReauth(`${service}/api/account/`),
 	endpoints: builder => ({
 		login: builder.mutation<Tokens, any>({
 			query: body => ({
