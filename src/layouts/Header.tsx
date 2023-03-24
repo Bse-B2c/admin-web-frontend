@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { setOpen, close } from '@store/appBar/appBarSlice';
 import AccountMenu from '@components/AccountMenu';
+import { useLocation } from 'react-router-dom';
 
 interface HeaderStateProps {}
 interface HeaderDispatchProps {}
@@ -22,7 +23,10 @@ type HeaderProps = HeaderStateProps & HeaderDispatchProps;
 
 const Header: FC<HeaderProps> = () => {
 	const dispatch = useDispatch();
+	const { pathname } = useLocation();
 	const { open } = useSelector((state: RootState) => state.appBar);
+
+	const paths = pathname.split('/').filter(path => path !== '') ?? [];
 	return (
 		<AppBar elevation={1} position={'fixed'} open={open} color={'inherit'}>
 			<Toolbar>
@@ -44,13 +48,27 @@ const Header: FC<HeaderProps> = () => {
 				</IconButton>
 				<Box component="div" sx={{ flexGrow: 1 }}>
 					<Breadcrumbs aria-label="breadcrumb">
-						<Link underline="hover" color="inherit" href="/">
-							MUI
+						<Link underline="hover" color="inherit" href={'/dashboard'}>
+							panel
 						</Link>
-						<Link underline="hover" color="inherit" href="/">
-							Core
-						</Link>
-						<Typography color={'text.primary'}>Breadcrumbs</Typography>
+						{paths.map((path, index) => {
+							const href = paths.slice(0, index).join('/');
+							const isLastPath = index === paths.length - 1;
+
+							return !isLastPath ? (
+								<Link
+									key={`${path}-${index}`}
+									underline="hover"
+									color={'inherit'}
+									href={href}>
+									{path}
+								</Link>
+							) : (
+								<Typography key={`${path}-${index}`} color={'text.primary'}>
+									{path}
+								</Typography>
+							);
+						})}
 					</Breadcrumbs>
 				</Box>
 				<AccountMenu />
