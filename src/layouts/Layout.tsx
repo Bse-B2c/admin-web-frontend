@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box, CssBaseline } from '@mui/material';
+import { Box, Container, CssBaseline } from '@mui/material';
 import Header from '@layouts/Header';
 import SideBar from '@layouts/SideBar';
 import Content from '@layouts/Content';
@@ -16,10 +16,10 @@ const Layout: FC<LayoutProps> = () => {
 			<CssBaseline />
 			<Header />
 			<SideBar />
-			<Box>
+			<Container fixed>
 				<DrawerHeader />
 				<Content />
-			</Box>
+			</Container>
 		</Box>
 	);
 };
