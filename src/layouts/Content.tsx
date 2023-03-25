@@ -11,7 +11,11 @@ type ContentProps = ContentDispatchProps & ContentStateProps;
 
 const Content: FC<ContentProps> = () => {
 	return (
-		<Container sx={{ paddingTop: 2 }} component="main">
+		<Container
+			disableGutters
+			maxWidth={'xl'}
+			sx={{ paddingTop: 2, flexGrow: 1 }}
+			component="main">
 			<Routes>
 				{routes.map((route, index) => {
 					const Element = route.element;

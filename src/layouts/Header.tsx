@@ -28,7 +28,7 @@ const Header: FC<HeaderProps> = () => {
 
 	const paths = pathname.split('/').filter(path => path !== '') ?? [];
 	return (
-		<AppBar elevation={1} position={'fixed'} open={open} color={'inherit'}>
+		<AppBar elevation={1} position={'fixed'} open={open} color={'transparent'}>
 			<Toolbar>
 				<IconButton
 					color="inherit"
