@@ -54,7 +54,7 @@ export const baseQueryWithReauth =
 			} else {
 				removeTokens();
 			}
-		} else if (error && (error.status === 400 || error.status === 403)) {
+		} else if (error && error.status === 403) {
 			removeTokens();
 		}
 
