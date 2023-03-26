@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ChangeEvent } from 'react';
 import {
 	Box,
 	Paper,
@@ -8,6 +8,7 @@ import {
 	TableRow,
 	TableBody,
 	TableCell,
+	TablePagination,
 } from '@mui/material';
 import { v4 as uuidV4 } from 'uuid';
 
@@ -19,14 +20,25 @@ interface ScopedSlots {
 	[key: string]: <T>(data: T, index: number) => JSX.Element;
 }
 
+interface Pagination {
+	rowsPerPageOptions: Array<number>;
+	count: number;
+	rowsPerPage: number;
+	page: number;
+}
+
 interface TableStateProps {
 	data: Array<Data>;
 	fields: Array<string>;
 	scopedSlots: ScopedSlots;
 	customHeaderSlots?: { [key: string]: () => JSX.Element };
 	size?: 'small' | 'medium';
+	paginationProps?: Pagination;
 }
-interface TableDispatchProps {}
+interface TableDispatchProps {
+	onPageChange?: (event: unknown, newPage: number) => void;
+	onRowsPerPageChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+}
 
 type TableProps = TableStateProps & TableDispatchProps;
 
@@ -36,6 +48,9 @@ const Table: FC<TableProps> = ({
 	scopedSlots,
 	size = 'small',
 	customHeaderSlots,
+	paginationProps,
+	onRowsPerPageChange,
+	onPageChange,
 }) => {
 	const fieldsExists: boolean = Array.isArray(fields) && fields.length > 0;
 	const bodyExists: boolean = Array.isArray(data) && data.length > 0;
@@ -86,6 +101,17 @@ const Table: FC<TableProps> = ({
 						</TableBody>
 					</MuiTable>
 				</TableContainer>
+				{paginationProps && onPageChange && onRowsPerPageChange && (
+					<TablePagination
+						rowsPerPageOptions={paginationProps.rowsPerPageOptions}
+						component="div"
+						count={paginationProps.count}
+						rowsPerPage={paginationProps.rowsPerPage}
+						page={paginationProps.page}
+						onPageChange={onPageChange}
+						onRowsPerPageChange={onRowsPerPageChange}
+					/>
+				)}
 			</Paper>
 		</Box>
 	);
