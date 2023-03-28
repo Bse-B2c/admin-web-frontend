@@ -17,7 +17,7 @@ interface Data {
 }
 
 interface ScopedSlots {
-	[key: string]: <T>(data: T, index: number) => JSX.Element;
+	[key: string]: (data: any, index: number) => JSX.Element;
 }
 
 interface Pagination {
@@ -58,20 +58,26 @@ const Table: FC<TableProps> = ({
 	const body =
 		bodyExists && fieldsExists ? (
 			data.map(itemRow => {
-				return fields.map((field, index) => {
-					const renderColumn = scopedSlots[field];
+				return (
+					<TableRow key={uuidV4()}>
+						{fields.map((field, index) => {
+							const renderColumn = scopedSlots[field];
 
-					return (
-						<TableCell key={uuidV4()}>
-							{renderColumn ? renderColumn(itemRow, index) : <div></div>}
-						</TableCell>
-					);
-				});
+							return (
+								<TableCell key={uuidV4()}>
+									{renderColumn ? renderColumn(itemRow, index) : <div></div>}
+								</TableCell>
+							);
+						})}
+					</TableRow>
+				);
 			})
 		) : (
-			<TableCell colSpan={fields.length} align="center" size="medium">
-				No items found
-			</TableCell>
+			<TableRow>
+				<TableCell colSpan={fields.length} align="center" size="medium">
+					No items found
+				</TableCell>
+			</TableRow>
 		);
 
 	const header = fieldsExists
@@ -96,9 +102,7 @@ const Table: FC<TableProps> = ({
 						<TableHead>
 							<TableRow>{header}</TableRow>
 						</TableHead>
-						<TableBody>
-							<TableRow>{body}</TableRow>
-						</TableBody>
+						<TableBody>{body}</TableBody>
 					</MuiTable>
 				</TableContainer>
 				{paginationProps && onPageChange && onRowsPerPageChange && (
