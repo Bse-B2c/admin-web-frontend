@@ -30,6 +30,7 @@ interface Pagination {
 interface TableStateProps {
 	data: Array<Data>;
 	fields: Array<string>;
+	layout: Array<string>;
 	scopedSlots: ScopedSlots;
 	customHeaderSlots?: { [key: string]: () => JSX.Element };
 	size?: 'small' | 'medium';
@@ -47,6 +48,7 @@ const Table: FC<TableProps> = ({
 	fields,
 	scopedSlots,
 	size = 'small',
+	layout,
 	customHeaderSlots,
 	paginationProps,
 	onRowsPerPageChange,
@@ -64,7 +66,7 @@ const Table: FC<TableProps> = ({
 							const renderColumn = scopedSlots[field];
 
 							return (
-								<TableCell key={uuidV4()}>
+								<TableCell key={uuidV4()} width={layout[index] ?? 'auto'}>
 									{renderColumn ? renderColumn(itemRow, index) : <div></div>}
 								</TableCell>
 							);
@@ -81,13 +83,13 @@ const Table: FC<TableProps> = ({
 		);
 
 	const header = fieldsExists
-		? fields.map(field => {
+		? fields.map((field, index) => {
 				const renderColumnHeader = customHeaderSlots
 					? customHeaderSlots[field]
 					: undefined;
 
 				return (
-					<TableCell key={uuidV4()}>
+					<TableCell key={uuidV4()} width={layout[index] ?? 'auto'}>
 						{renderColumnHeader ? renderColumnHeader() : field}
 					</TableCell>
 				);
