@@ -122,6 +122,27 @@ interface TableDispatchProps {
 
 type TableProps = TableStateProps & TableDispatchProps;
 
+/**
+ * Component to render table
+ *
+ * @example
+ *	const data = [{name: "Rodrigo", age: 24}];
+ *	const fields = [{label: "Name", key: "name"}, {label:"Age", key:"age"}];
+ *	const layout = ["60%","40%"];
+ *	const scopedColumns = {
+ *	 name: ({name}) => <div>{name}</div>,
+ *	 age: ({age}) => <div>{age}</div>
+ *	}
+ *
+ *	´Simple Usage:´
+ *
+ * 	<Table
+ * 		data={data}
+ * 		fields={fields}
+ * 		layout={layout}
+ * 		scopedColumns={scopedColumns}
+ * 		/>
+ */
 const Table: FC<TableProps> = ({
 	data,
 	fields,
