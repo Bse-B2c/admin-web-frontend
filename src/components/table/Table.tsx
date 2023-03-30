@@ -9,6 +9,7 @@ import {
 	TableBody,
 	TableCell,
 	TablePagination,
+	TableSortLabel,
 } from '@mui/material';
 import { v4 as uuidV4 } from 'uuid';
 
@@ -16,29 +17,107 @@ interface Data {
 	[key: string]: any;
 }
 
-interface ScopedSlots {
+interface ScopedColumns {
+	/**
+	 * key - The key of Field
+	 */
 	[key: string]: (data: any, index: number) => JSX.Element;
 }
 
 interface Pagination {
+	/**
+	 * Rows per Page Options
+	 */
 	rowsPerPageOptions: Array<number>;
+	/**
+	 * Total Pages
+	 */
 	count: number;
+	/**
+	 * Rows Per Page
+	 */
 	rowsPerPage: number;
+	/**
+	 * Current page
+	 */
 	page: number;
 }
 
+interface Field {
+	/**
+	 * The label to display in the header
+	 */
+	label: string;
+	/**
+	 *	Key to identify scoped columns rendering function,
+	 *	Key used to identify the property to be classified
+	 */
+	key: string;
+}
+
+type SortOrder = 'DESC' | 'ASC';
+
 interface TableStateProps {
+	/**
+	 * The data to be rendered in the table body
+	 */
 	data: Array<Data>;
-	fields: Array<string>;
+	/**
+	 * The fields to render in the table header
+	 */
+	fields: Array<Field>;
+	/**
+	 * The width in percentage of the columns
+	 */
 	layout: Array<string>;
-	scopedSlots: ScopedSlots;
+	/**
+	 * Scoped Columns
+	 */
+	scopedColumns: ScopedColumns;
+	/**
+	 * Custom Header Fields
+	 */
 	customHeaderSlots?: { [key: string]: () => JSX.Element };
+	/**
+	 *	Table size
+	 */
 	size?: 'small' | 'medium';
+	/**
+	 * Pagination properties
+	 */
 	paginationProps?: Pagination;
+	/**
+	 * Sort state
+	 */
+	sortState?: {
+		/**
+		 * Sort order type
+		 */
+		sortOrder: SortOrder;
+		/**
+		 * Header key to be sorted
+		 */
+		orderBy: string;
+	};
 }
 interface TableDispatchProps {
+	/**
+	 * Event to change the current page
+	 * @param event
+	 * @param newPage - new Page
+	 */
 	onPageChange?: (event: unknown, newPage: number) => void;
+	/**
+	 * Event to select the number of rows per page
+	 * @param event - Input Element Change event
+	 */
 	onRowsPerPageChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+	/**
+	 *
+	 * @param key - [Header key]{@link Field} to be sorted
+	 * @param sortOrder - Sort order type
+	 */
+	onChangeSort?: (key: string, sortOrder: SortOrder) => void;
 }
 
 type TableProps = TableStateProps & TableDispatchProps;
@@ -46,13 +125,15 @@ type TableProps = TableStateProps & TableDispatchProps;
 const Table: FC<TableProps> = ({
 	data,
 	fields,
-	scopedSlots,
+	scopedColumns,
 	size = 'small',
 	layout,
 	customHeaderSlots,
 	paginationProps,
+	sortState,
 	onRowsPerPageChange,
 	onPageChange,
+	onChangeSort,
 }) => {
 	const fieldsExists: boolean = Array.isArray(fields) && fields.length > 0;
 	const bodyExists: boolean = Array.isArray(data) && data.length > 0;
@@ -63,7 +144,7 @@ const Table: FC<TableProps> = ({
 				return (
 					<TableRow key={uuidV4()}>
 						{fields.map((field, index) => {
-							const renderColumn = scopedSlots[field];
+							const renderColumn = scopedColumns[field.key];
 
 							return (
 								<TableCell key={uuidV4()} width={layout[index] ?? 'auto'}>
@@ -85,12 +166,30 @@ const Table: FC<TableProps> = ({
 	const header = fieldsExists
 		? fields.map((field, index) => {
 				const renderColumnHeader = customHeaderSlots
-					? customHeaderSlots[field]
+					? customHeaderSlots[field.key]
 					: undefined;
+
+				if (onChangeSort && sortState) {
+					const { sortOrder, orderBy } = sortState;
+					const direction = sortOrder === 'DESC' ? 'desc' : 'asc';
+
+					return (
+						<TableCell key={uuidV4()} width={layout[index] ?? 'auto'}>
+							<TableSortLabel
+								active={orderBy === field.key}
+								direction={direction}
+								onClick={() =>
+									onChangeSort(field.key, sortOrder === 'DESC' ? 'ASC' : 'DESC')
+								}>
+								{field.label}
+							</TableSortLabel>
+						</TableCell>
+					);
+				}
 
 				return (
 					<TableCell key={uuidV4()} width={layout[index] ?? 'auto'}>
-						{renderColumnHeader ? renderColumnHeader() : field}
+						{renderColumnHeader ? renderColumnHeader() : field.label}
 					</TableCell>
 				);
 		  })
