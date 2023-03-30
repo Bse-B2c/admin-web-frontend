@@ -142,6 +142,34 @@ type TableProps = TableStateProps & TableDispatchProps;
  * 		layout={layout}
  * 		scopedColumns={scopedColumns}
  * 		/>
+ *
+ *  ´Pagination Usage´
+ *
+ *  <Table
+ * 		data={data}
+ * 		fields={fields}
+ * 		layout={layout}
+ * 		scopedColumns={scopedColumns}
+ * 	 paginationProps={{
+ * 					page: 0,
+ * 					rowsPerPage: 10,
+ * 					rowsPerPageOptions: [10, 20, 30, 40, 50],
+ * 					count: 100,
+ * 				}}
+ * 		onRowsPerPageChange={(event) => { console.log(event.target.value)}}
+ * 		onPageChange={(event, newPage) => {console.log(newPage)}}
+ * 		/>
+ *
+ * 	´Sort Usage´
+ *
+ * 	 <Table
+ * 		data={data}
+ * 		fields={fields}
+ * 		layout={layout}
+ * 		scopedColumns={scopedColumns}
+ * 	 sortState={{sortOrder: "ASC", orderBy: "name"}}
+ * 	 onChangeSort={(key, sortOrder) => console.log(key, sortOrder)}
+ * 		/>
  */
 const Table: FC<TableProps> = ({
 	data,
