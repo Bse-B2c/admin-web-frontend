@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, FormGroup, Grid, Icon, TextField } from '@mui/material';
+import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { useForm } from '@hooks/useForm';
 
@@ -23,32 +23,29 @@ const SearchForm: FC<SearchFormProps> = ({ value, onSubmit }) => {
 		<Grid
 			component="form"
 			onSubmit={handleSubmit(({ name }) => onSubmit(name))}>
-			<FormGroup row>
-				<Grid item xs={11}>
-					<TextField
-						fullWidth
-						name="name"
-						id="outlined-basic"
-						label="Customer Name"
-						size="small"
-						value={name}
-						onChange={onChange}
-					/>
-				</Grid>
-				<Grid item xs={1}>
-					<Button
-						size="small"
-						color="primary"
-						type="submit"
-						variant="contained"
-						sx={{ p: 1, marginLeft: 1 }}>
-						<Icon>
-							<Search />
-						</Icon>
-						Search
-					</Button>
-				</Grid>
-			</FormGroup>
+			<TextField
+				fullWidth
+				name="name"
+				id="outlined-search"
+				label="Customer Name"
+				placeholder={'Ex: Rodrigo'}
+				size="small"
+				value={name}
+				onChange={onChange}
+				InputProps={{
+					endAdornment: (
+						<InputAdornment position="end">
+							<IconButton
+								aria-label="search"
+								edge="end"
+								color={'secondary'}
+								type={'submit'}>
+								<Search />
+							</IconButton>
+						</InputAdornment>
+					),
+				}}
+			/>
 		</Grid>
 	);
 };
