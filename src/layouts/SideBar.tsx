@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
 	Divider,
 	List,
@@ -8,12 +8,15 @@ import {
 	ListItemText,
 	Tooltip,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Drawer from '@components/Drawer';
 import DrawerHeader from '@components/DrawerHeader';
 import { RootState } from '@/store';
 import { nav } from '@layouts/navBar';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { close } from '@/store/appBar/appBarSlice';
 import logo from '@/assets/react.svg';
 
 interface SideBarStateProps {}
@@ -22,8 +25,17 @@ interface SideBarDispatchProps {}
 type SideBarProps = SideBarStateProps & SideBarDispatchProps;
 
 const SideBar: FC<SideBarProps> = () => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const theme = useTheme();
+	const matches = useMediaQuery(theme.breakpoints.down('sm'));
 	const { open } = useSelector((state: RootState) => state.appBar);
+
+	useEffect(() => {
+		if (matches && open) {
+			dispatch(close());
+		}
+	}, [matches, dispatch]);
 
 	return (
 		<Drawer variant="permanent" open={open}>
