@@ -12,9 +12,10 @@ import MenuIconOpen from '@mui/icons-material/MenuOpen';
 import AppBar from '@components/AppBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { setOpen, close } from '@store/appBar/appBarSlice';
+import { setOpen, close } from '@store/app/appSlice';
 import AccountMenu from '@components/AccountMenu';
 import { useLocation } from 'react-router-dom';
+import SwitchTheme from '@components/switchTheme/SwitchTheme';
 
 interface HeaderStateProps {}
 interface HeaderDispatchProps {}
@@ -24,7 +25,7 @@ type HeaderProps = HeaderStateProps & HeaderDispatchProps;
 const Header: FC<HeaderProps> = () => {
 	const dispatch = useDispatch();
 	const { pathname } = useLocation();
-	const { open } = useSelector((state: RootState) => state.appBar);
+	const { open } = useSelector((state: RootState) => state.app);
 
 	const paths = pathname.split('/').filter(path => path !== '') ?? [];
 	return (
@@ -71,6 +72,7 @@ const Header: FC<HeaderProps> = () => {
 						})}
 					</Breadcrumbs>
 				</Box>
+				<SwitchTheme />
 				<AccountMenu />
 			</Toolbar>
 		</AppBar>
