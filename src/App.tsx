@@ -1,6 +1,8 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useMemo } from 'react';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
 import { Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const Login = lazy(() => import('@pages/Login'));
 const Layout = lazy(() => import('@layouts/Layout'));
@@ -8,16 +10,21 @@ const RequireAuth = lazy(
 	() => import('@features/authentication/components/RequireAuth')
 );
 
-let theme = createTheme({
-	palette: {
-		mode: 'dark',
-	},
-});
-theme = responsiveFontSizes(theme);
-
 function App() {
+	const { mode } = useSelector((state: RootState) => state.app);
+
+	const theme = useMemo(
+		() =>
+			createTheme({
+				palette: {
+					mode: mode ?? 'light',
+				},
+			}),
+		[mode]
+	);
+
 	return (
-		<ThemeProvider theme={theme}>
+		<ThemeProvider theme={responsiveFontSizes(theme)}>
 			<Suspense>
 				<Routes>
 					<Route path={'login'} element={<Login />} />
