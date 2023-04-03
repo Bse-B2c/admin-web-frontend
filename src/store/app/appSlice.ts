@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ThemeMode } from '@/model/ThemeMode';
 
 export interface AppState {
 	open: boolean;
-	mode: 'light' | 'dark';
+	mode: ThemeMode;
 }
 
 const initialState: AppState = {
@@ -20,7 +21,7 @@ export const appSlice = createSlice({
 		close: state => {
 			state.open = false;
 		},
-		setMode: (state, action: PayloadAction<'light' | 'dark'>) => {
+		setMode: (state, action: PayloadAction<ThemeMode>) => {
 			state.mode = action.payload;
 		},
 	},
