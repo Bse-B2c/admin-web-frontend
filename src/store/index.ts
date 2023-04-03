@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import appBarReducer from '@store/appBar/appBarSlice';
+import appReducer from '@store/app/appSlice';
 import { authApi } from '@features/authentication';
 import { customerApi } from '@features/customer';
 
@@ -7,7 +7,7 @@ export const store = configureStore({
 	reducer: {
 		[authApi.reducerPath]: authApi.reducer,
 		[customerApi.reducerPath]: customerApi.reducer,
-		appBar: appBarReducer,
+		app: appReducer,
 	},
 	devTools: true,
 	middleware: getDefaultMiddleware =>

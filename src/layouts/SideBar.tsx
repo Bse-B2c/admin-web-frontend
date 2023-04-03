@@ -16,7 +16,7 @@ import { RootState } from '@/store';
 import { nav } from '@layouts/navBar';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { close } from '@/store/appBar/appBarSlice';
+import { close } from '@/store/app/appSlice';
 import logo from '@/assets/react.svg';
 
 interface SideBarStateProps {}
@@ -29,7 +29,7 @@ const SideBar: FC<SideBarProps> = () => {
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const matches = useMediaQuery(theme.breakpoints.down('sm'));
-	const { open } = useSelector((state: RootState) => state.appBar);
+	const { open } = useSelector((state: RootState) => state.app);
 
 	useEffect(() => {
 		if (matches && open) {
