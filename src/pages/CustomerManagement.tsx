@@ -4,12 +4,13 @@ import { Add } from '@mui/icons-material';
 import CustomersList from '@features/customer/components/customers/CustomerList';
 import ContentHeader from '@components/contentHeader/ContentHeader';
 
-interface CustomersStateProps {}
-interface CustomersDispatchProps {}
+interface CustomerManagementStateProps {}
+interface CustomerManagementDispatchProps {}
 
-type CustomersProps = CustomersStateProps & CustomersDispatchProps;
+type CustomerManagementProps = CustomerManagementStateProps &
+	CustomerManagementDispatchProps;
 
-const Customers: FC<CustomersProps> = () => {
+const CustomerManagement: FC<CustomerManagementProps> = () => {
 	return (
 		<ContentHeader
 			title="Customers"
@@ -27,4 +28,4 @@ const Customers: FC<CustomersProps> = () => {
 	);
 };
 
-export default Customers;
+export default CustomerManagement;
