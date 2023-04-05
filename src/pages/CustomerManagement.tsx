@@ -19,6 +19,7 @@ const CustomerManagement: FC<CustomerManagementProps> = () => {
 					color={'success'}
 					size={'small'}
 					variant="outlined"
+					href={'/customer/new'}
 					startIcon={<Add />}>
 					New Customer
 				</Button>
