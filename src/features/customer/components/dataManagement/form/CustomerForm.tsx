@@ -11,6 +11,18 @@ import {
 } from '@mui/material';
 import { Save } from '@mui/icons-material';
 import { grey } from '@mui/material/colors';
+import { useForm } from '@hooks/useForm';
+import { DateField, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+interface Form {
+	name: string;
+	email: string;
+	password: string;
+	phone: string;
+	cpf: string;
+	brithDate: string | null;
+}
 
 interface CustomerFormStateProps {}
 interface CustomerFormDispatchProps {}
@@ -18,9 +30,26 @@ interface CustomerFormDispatchProps {}
 type CustomerFormProps = CustomerFormStateProps & CustomerFormDispatchProps;
 
 const CustomerForm: FC<CustomerFormProps> = () => {
+	const {
+		form: { name, cpf, brithDate, email, password, phone },
+		onChange,
+		onChangeDate,
+		handleSubmit,
+	} = useForm<Form>({
+		name: '',
+		cpf: '',
+		brithDate: null,
+		email: '',
+		password: '',
+		phone: '',
+	});
+
 	return (
 		<Card variant="outlined" sx={{ width: '50%' }}>
-			<FormControl fullWidth>
+			<FormControl
+				component={'form'}
+				fullWidth
+				onSubmit={handleSubmit(data => console.log(data))}>
 				<CardContent>
 					<Grid container direction={'column'} spacing={2}>
 						<Grid item xs textAlign={'center'}>
@@ -32,52 +61,75 @@ const CustomerForm: FC<CustomerFormProps> = () => {
 						<Grid item xs>
 							<TextField
 								required
-								placeholder={'Ex: Rodrigo Limões'}
-								size={'small'}
 								fullWidth
-								label={'Name'}
-								margin={'dense'}
+								size="small"
+								margin="dense"
+								name="name"
+								placeholder="Ex: Rodrigo Limões"
+								label="Name"
+								value={name}
+								onChange={onChange}
 							/>
 							<TextField
 								required
-								placeholder={'Ex: rodrigo@gmail.com'}
-								size={'small'}
 								fullWidth
-								label={'Email'}
-								margin={'dense'}
+								size="small"
+								margin="dense"
+								name="email"
+								placeholder="Ex: rodrigo@gmail.com"
+								label="Email"
+								value={email}
+								onChange={onChange}
 							/>
 							<TextField
 								required
-								placeholder={'Password'}
-								size={'small'}
 								fullWidth
-								label={'Password'}
-								margin={'dense'}
+								type="password"
+								margin="dense"
+								size="small"
+								placeholder="Password"
+								label="Password"
+								name="password"
+								value={password}
+								onChange={onChange}
 							/>
 							<TextField
 								required
-								placeholder={'Ex: 21 965984315'}
-								size={'small'}
-								type={'tel'}
 								fullWidth
-								label={'Phone'}
-								margin={'dense'}
+								size="small"
+								margin="dense"
+								name="phone"
+								placeholder="Ex: (21) 965984315"
+								type="tel"
+								label="Phone"
+								value={phone}
+								onChange={onChange}
 							/>
 							<TextField
 								required
-								placeholder={'Ex: 12345678966'}
-								size={'small'}
 								fullWidth
-								label={'Cpf'}
-								margin={'dense'}
+								size="small"
+								margin="dense"
+								name="cpf"
+								placeholder="Ex: 12345678966"
+								label="Cpf"
+								value={cpf}
+								onChange={onChange}
 							/>
-							<TextField
-								required
-								size={'small'}
-								fullWidth
-								label={'BrithDate'}
-								margin={'dense'}
-							/>
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
+								<DateField
+									fullWidth
+									required
+									size="small"
+									margin="dense"
+									format="DD/MM/YYYY"
+									value={brithDate}
+									label="BrithDate"
+									onChange={value => {
+										onChangeDate('brithDate', value);
+									}}
+								/>
+							</LocalizationProvider>
 						</Grid>
 					</Grid>
 				</CardContent>
@@ -88,6 +140,7 @@ const CustomerForm: FC<CustomerFormProps> = () => {
 						paddingRight: 2,
 					}}>
 					<Button
+						type="submit"
 						variant={'contained'}
 						color={'success'}
 						size={'small'}
