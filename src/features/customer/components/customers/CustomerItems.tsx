@@ -22,8 +22,8 @@ export const fields = [
 		key: 'cpf',
 	},
 	{
-		label: 'Create At',
-		key: 'createAt',
+		label: 'Created At',
+		key: 'createdAt',
 	},
 	{
 		label: '',
@@ -38,8 +38,8 @@ export const getCustomerItem = () => ({
 	email: ({ email }: User) => <div>{email}</div>,
 	phone: ({ phone }: User) => <div>{phone}</div>,
 	cpf: ({ cpf }: User) => <div>{cpf}</div>,
-	createAt: ({ createdAt }: User) => (
-		<div>{formatDate(createdAt, 'en-US')}</div>
+	createdAt: ({ createdAt }: User) => (
+		<div>{formatDate(createdAt, 'pt-br')}</div>
 	),
 	options: () => (
 		<div>
