@@ -13,7 +13,7 @@ export const usePopperContext = () => {
 
 	if (!context)
 		throw new Error(
-			'Child components of Popper cannot be rendered outside the Card component!'
+			'Child components of Popper cannot be rendered outside the Popper component!'
 		);
 
 	return context;

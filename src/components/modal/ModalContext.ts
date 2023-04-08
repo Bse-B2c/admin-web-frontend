@@ -12,7 +12,7 @@ export const useModalContext = () => {
 
 	if (!context)
 		throw new Error(
-			'Child components of Modal cannot be rendered outside the Card component!'
+			'Child components of Modal cannot be rendered outside the Modal component!'
 		);
 
 	return context;
