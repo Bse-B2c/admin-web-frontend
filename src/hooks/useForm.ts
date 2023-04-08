@@ -19,9 +19,14 @@ export const useForm = <T>(state: T) => {
 			onSubmit(form);
 		};
 
+	const onChangeDate = (key: string, value: string | null) => {
+		setForm(prevState => ({ ...prevState, [key]: value }));
+	};
+
 	return {
 		form,
 		onChange,
+		onChangeDate,
 		handleSubmit,
 	};
 };
