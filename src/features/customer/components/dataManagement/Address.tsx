@@ -44,7 +44,7 @@ const Address: FC<AddressProps> = ({
 	onPinned,
 }) => {
 	return (
-		<Card variant="outlined" sx={{ marginBottom: 1 }}>
+		<Card variant="outlined">
 			<CardContent>
 				<Box
 					marginBottom={1}
