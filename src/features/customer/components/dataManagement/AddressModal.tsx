@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Modal } from '@components/modal';
 import { Button, Grid } from '@mui/material';
 import { Close, Save } from '@mui/icons-material';
+import AddressForm from '@features/customer/components/dataManagement/form/AddressForm';
 
 interface AddressModalStateProps {
 	open: boolean;
@@ -12,13 +13,14 @@ interface AddressModalDispatchProps {
 
 type AddressModalProps = AddressModalStateProps & AddressModalDispatchProps;
 
-//TODO: Add Address Form
 //TODO: Add onClick event in Create button
 const AddressModal: FC<AddressModalProps> = ({ open, onClose }) => {
 	return (
 		<Modal open={open} alignment={'center'} buttonClose onClose={onClose}>
 			<Modal.Header>Add Address</Modal.Header>
-			<Modal.Content>Form</Modal.Content>
+			<Modal.Content>
+				<AddressForm />
+			</Modal.Content>
 			<Modal.Footer>
 				<Grid container justifyContent="end">
 					<Button
