@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { Dayjs } from 'dayjs';
 
 /**
  * Custom hook to handle forms
@@ -19,7 +20,7 @@ export const useForm = <T>(state: T) => {
 			onSubmit(form);
 		};
 
-	const onChangeDate = (key: string, value: string | null) => {
+	const onChangeDate = (key: string, value: Dayjs | null) => {
 		setForm(prevState => ({ ...prevState, [key]: value }));
 	};
 
@@ -28,5 +29,6 @@ export const useForm = <T>(state: T) => {
 		onChange,
 		onChangeDate,
 		handleSubmit,
+		setForm,
 	};
 };
