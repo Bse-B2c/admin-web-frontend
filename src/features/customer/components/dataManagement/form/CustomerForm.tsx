@@ -42,16 +42,35 @@ interface CustomerFormDispatchProps {
 type CustomerFormProps = CustomerFormStateProps & CustomerFormDispatchProps;
 
 const CustomerForm: FC<CustomerFormProps> = ({ customerData, handleNext }) => {
-	const { form, onChange, onChangeDate, handleSubmit, setForm } = useForm<Form>(
-		{
-			name: '',
-			cpf: '',
-			brithDate: null,
-			email: '',
-			phone: '',
-		}
-	);
 	const [updateCustomer] = useUpdateCustomerMutation();
+	const { form, onChange, onChangeDate, handleSubmit, setForm, errors } =
+		useForm<Form>(
+			{
+				name: '',
+				cpf: '',
+				brithDate: null,
+				email: '',
+				phone: '',
+			},
+			{
+				name: {
+					required: { value: true, message: 'Name cannot be empty' },
+				},
+				email: {
+					required: { value: true, message: 'Email cannot be empty' },
+					pattern: {
+						value: /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/g,
+						message: 'Invalid email address',
+					},
+				},
+				phone: {
+					required: { value: true, message: 'Phone cannot be empty' },
+				},
+				cpf: {
+					required: { value: true, message: 'Cpf cannot be empty' },
+				},
+			}
+		);
 
 	useEffect(() => {
 		if (customerData) {
@@ -90,10 +109,11 @@ const CustomerForm: FC<CustomerFormProps> = ({ customerData, handleNext }) => {
 						</Grid>
 						<Grid item xs>
 							<TextField
-								required
+								error={!!errors?.name ?? undefined}
+								helperText={errors?.name ?? undefined}
 								fullWidth
 								size="small"
-								margin="dense"
+								margin="normal"
 								name="name"
 								placeholder="Ex: Rodrigo Limões"
 								label="Name"
@@ -101,7 +121,8 @@ const CustomerForm: FC<CustomerFormProps> = ({ customerData, handleNext }) => {
 								onChange={onChange}
 							/>
 							<TextField
-								required
+								error={!!errors?.email ?? undefined}
+								helperText={errors?.email ?? undefined}
 								fullWidth
 								size="small"
 								margin="dense"
@@ -112,7 +133,8 @@ const CustomerForm: FC<CustomerFormProps> = ({ customerData, handleNext }) => {
 								onChange={onChange}
 							/>
 							<TextField
-								required
+								error={!!errors?.phone ?? undefined}
+								helperText={errors?.phone ?? undefined}
 								fullWidth
 								size="small"
 								margin="dense"
@@ -124,14 +146,14 @@ const CustomerForm: FC<CustomerFormProps> = ({ customerData, handleNext }) => {
 								onChange={onChange}
 							/>
 							<TextField
-								required
+								error={!!errors?.cpf ?? undefined}
+								helperText={errors?.cpf ?? undefined}
 								fullWidth
 								size="small"
 								margin="dense"
 								name="cpf"
 								placeholder="Ex: 12345678912"
 								label="Cpf"
-								inputProps={{ maxlength: 11 }}
 								value={form.cpf}
 								onChange={onChange}
 							/>
