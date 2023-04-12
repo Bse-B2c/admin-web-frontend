@@ -16,6 +16,9 @@ import { DateField, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import { useUpdateCustomerMutation } from '@features/customer/services/customerApi';
+import { useDispatch } from 'react-redux';
+import { showNotification } from '@store/notification/notificationSlice';
+import { ApiResponse } from '@/model/ApiResponse';
 
 interface Form {
 	name: string;
@@ -42,6 +45,7 @@ interface CustomerFormDispatchProps {
 type CustomerFormProps = CustomerFormStateProps & CustomerFormDispatchProps;
 
 const CustomerForm: FC<CustomerFormProps> = ({ customerData, handleNext }) => {
+	const dispatch = useDispatch();
 	const [updateCustomer] = useUpdateCustomerMutation();
 	const { form, onChange, onChangeDate, handleSubmit, setForm, errors } =
 		useForm<Form>(
@@ -84,15 +88,33 @@ const CustomerForm: FC<CustomerFormProps> = ({ customerData, handleNext }) => {
 	}, [customerData]);
 
 	const onSubmit = handleSubmit(async ({ brithDate, ...formState }) => {
-		if (customerData) {
-			const id = customerData.id;
-			const { error } = await updateCustomer({
-				id,
-				brithDate: brithDate?.toISOString() || '',
-				...formState,
-			}).unwrap();
+		try {
+			if (customerData) {
+				const id = customerData.id;
+				const { error } = await updateCustomer({
+					id,
+					brithDate: brithDate?.toISOString() || '',
+					...formState,
+				}).unwrap();
 
-			if (!error) handleNext();
+				if (!error) {
+					dispatch(
+						showNotification({
+							type: 'success',
+							message: 'Customer updated successfully',
+						})
+					);
+					handleNext();
+				}
+			}
+		} catch ({ data }) {
+			const apiResponse = data as ApiResponse<null>;
+			dispatch(
+				showNotification({
+					type: 'error',
+					message: apiResponse.error?.message || 'something went wrong',
+				})
+			);
 		}
 	});
 
